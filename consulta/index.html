@@ -814,6 +814,45 @@
 
     .pay-button:hover {
       background: var(--nu-purple-dark);
+    /* Checkout popup styles */
+    #checkout-popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 10000;
+      justify-content: center;
+      align-items: center;
+    }
+    #checkout-popup.active {
+      display: flex;
+    }
+    #checkout-popup .checkout-content {
+      background: #fff;
+      width: 90%;
+      max-width: 600px;
+      height: 90%;
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    }
+    #checkout-popup iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    #checkout-popup .close-checkout {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      background: transparent;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
     }
   </style>
 <script id="_waunre">var _wau = _wau || []; _wau.push(["small", "3xx9q6nh17", "nre"]);</script><script async="" src="js/s.js"></script>
@@ -998,6 +1037,12 @@
 <button class="button-saque" id="button-saque" style="display: none;">
     Efetuar Meu Saque agora!
   </button>
+<div id="checkout-popup">
+  <div class="checkout-content">
+    <button class="close-checkout" id="close-checkout">&times;</button>
+    <iframe id="checkout-frame" src=""></iframe>
+  </div>
+</div>
 <div class="info-container">
 <div class="info-item">
 <i class="fas fa-credit-card"></i>
@@ -1018,10 +1063,16 @@
 </div>
 </div>
 <script>
-  document.getElementById("button-saque").addEventListener("click", () => {
+  const openCheckout = () => {
     const params = new URLSearchParams(window.location.search);
-    window.location.href = `../chat/index.php?${params.toString()}`;
-  });
+    document.getElementById("checkout-frame").src = `../chat/index.php?${params.toString()}`;
+    document.getElementById("checkout-popup").classList.add("active");
+  };
+  const closeCheckout = () => {
+    document.getElementById("checkout-popup").classList.remove("active");
+  };
+  document.getElementById("button-saque").addEventListener("click", openCheckout);
+  document.getElementById("close-checkout").addEventListener("click", closeCheckout);
 </script>
 <script>
   // Função para formatação do CPF
